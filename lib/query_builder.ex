@@ -6,7 +6,6 @@ defmodule Spandex.QueryBuilder do
           args
           |> Map.merge(%{index: unquote(index)})
           |> Enum.into([])
-          |> IO.inspect()
 
         struct(__MODULE__, args)
       end
