@@ -127,8 +127,7 @@ defmodule Spandex.Adapters.ElasticSearch do
     end
   end
 
-  defp index_name(%Spandex.Query{language: language} = query_struct)
-       when language in ["", "en"] do
+  defp index_name(%Spandex.Query{language: language} = query_struct) do
     type_handler(query_struct)
     |> Macro.underscore()
     |> Inflex.pluralize()
@@ -141,7 +140,7 @@ defmodule Spandex.Adapters.ElasticSearch do
   defp index_suffix(name, _), do: name
 
   defp translated_index_action(function) do
-    languages = ["en"]
+    languages = Application.get_env(:spandex, :languages) || ["en"]
 
     Enum.map(languages, fn language ->
       function.(language)
