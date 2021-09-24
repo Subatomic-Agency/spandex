@@ -127,7 +127,7 @@ defmodule Spandex.Adapters.ElasticSearch do
     end
   end
 
-  defp index_name(%SearchService.Query{language: language, index: index})
+  defp index_name(%Spandex.Query{language: language, index: index})
        when language in ["", "en"] do
     index.type
     |> Macro.underscore()
