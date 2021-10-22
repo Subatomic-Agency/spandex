@@ -9,13 +9,11 @@ defmodule Spandex.Test.Helpers do
   end
 
   defp take_action(action) do
-    for {module, _} <- :code.all_loaded(),
-        Spandex.Behaviour.Index in (module.module_info(:attributes)
-                                    |> Keyword.get_values(:behaviour)
-                                    |> List.flatten()) do
-      module
+    Spandex.queries()
+    |> Enum.each(fn query ->
+      query
       |> Spandex.Query.compile(%{action: action})
       |> Spandex.run_query()
-    end
+    end)
   end
 end
