@@ -127,15 +127,13 @@ defmodule Spandex.Adapters.ElasticSearch do
     end
   end
 
-  defp index_name(%Spandex.Query{language: language, index: index})
-       when language in ["", "en"] do
-    index.type
-    |> Macro.underscore()
-    |> Inflex.pluralize()
+  defp index_name(%Spandex.Query{language: language, index: index}) do
+    index.module.base_name()
+    |> language_prefix(language)
     |> index_suffix(Mix.env())
   end
 
-  defp index_name(query_struct), do: "#{query_struct.language}_#{index_name(query_struct)}"
+  defp language_prefix(name, language \\ "en"), do: language <> "_" <> name
 
   defp index_suffix(name, :test), do: name <> "_test"
   defp index_suffix(name, _), do: name

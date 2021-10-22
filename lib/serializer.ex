@@ -6,12 +6,13 @@ defmodule Spandex.Serializer do
   end
 
   def serialize(%{"_source" => source, "_index" => index}) do
-    type = desuffix(index, Mix.env())
+    type =
+      index
+      |> deprefix()
+      |> desuffix(Mix.env())
 
-    application = Application.get_env(:spandex, :namespace)
-
-    module =
-      Module.concat([application, Macro.camelize(type), Inflex.singularize(Macro.camelize(type))])
+    index_module = Spandex.indices() |> Enum.find(&(&1.base_name() == type))
+    module = index_module.maps_to()
 
     schema_fields = for key <- module.__schema__(:fields), into: [], do: to_string(key)
     es_fields = Map.keys(source)
@@ -34,6 +35,12 @@ defmodule Spandex.Serializer do
     struct = struct(module, map_for_struct)
 
     %{struct: struct, meta: Map.take(source, meta_fields)}
+  end
+
+  defp deprefix(name) do
+    [_lang, type] = String.split(name, "_", parts: 2)
+
+    type
   end
 
   defp desuffix(name, :test), do: String.replace_suffix(name, "_test", "")
