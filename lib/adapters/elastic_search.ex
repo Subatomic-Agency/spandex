@@ -127,8 +127,9 @@ defmodule Spandex.Adapters.ElasticSearch do
     end
   end
 
-  defp index_name(%Spandex.Query{language: language} = query_struct) do
-    type_handler(query_struct)
+  defp index_name(%Spandex.Query{language: language, index: index})
+       when language in ["", "en"] do
+    index.type
     |> Macro.underscore()
     |> Inflex.pluralize()
     |> index_suffix(Mix.env())
@@ -145,11 +146,5 @@ defmodule Spandex.Adapters.ElasticSearch do
     Enum.map(languages, fn language ->
       function.(language)
     end)
-  end
-
-  defp type_handler(typed_struct) do
-    typed_struct.query.__struct__
-    |> Module.split()
-    |> List.last()
   end
 end
