@@ -133,7 +133,7 @@ defmodule Spandex.Adapters.ElasticSearch do
     |> index_suffix(Mix.env())
   end
 
-  defp language_prefix(name, language \\ "en"), do: language <> "_" <> name
+  defp language_prefix(name, language), do: language <> "_" <> name
 
   defp index_suffix(name, :test), do: name <> "_test"
   defp index_suffix(name, _), do: name
