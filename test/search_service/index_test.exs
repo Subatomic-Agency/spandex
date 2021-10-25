@@ -14,8 +14,7 @@ defmodule Spandex.IndexTest do
                      "asset.text_content": %{type: "text"}
                    }
                  },
-                 module: Spandex.Index.Session,
-                 type: "session"
+                 module: Spandex.Index.Session
                }
     end
   end

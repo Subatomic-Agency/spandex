@@ -4,16 +4,9 @@ defmodule Spandex.Query do
   def compile(thing, params \\ %{})
 
   def compile(query_map, params) when is_struct(query_map) and is_map(params) do
-    module =
-      query_map.__struct__
-      |> Module.split()
-      |> List.last()
-
-    index_module = Module.concat([Spandex, Index, module])
-
     struct(
       %Spandex.Query{},
-      Map.merge(params, %{query: query_map, index: index_module.reference()})
+      Map.merge(params, %{query: query_map, index: query_map.index.reference()})
     )
   end
 

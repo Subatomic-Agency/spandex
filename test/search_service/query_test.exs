@@ -1,3 +1,42 @@
+defmodule Spandex.Index.Session do
+  use Spandex.Index
+
+  @spec settings() :: map
+  @impl true
+  def settings() do
+    %{
+      settings: %{}
+    }
+  end
+
+  @spec mapping() :: Spandex.Behaviour.Index.index_mapping()
+  @impl true
+  def mapping() do
+    %{
+      properties: %{
+        id: %{type: "integer"},
+        title: %{type: "text"},
+        category: %{type: "text"},
+        "contributor.name": %{type: "text"},
+        "asset.text_content": %{type: "text"}
+      }
+    }
+  end
+
+  @spec generator(String.t()) :: [Spandex.Behaviour.Index.index_generator_list()]
+  @impl true
+  def generator(_language \\ "en"), do: []
+
+  @spec updater(%{}) :: [Spandex.Behaviour.Index.index_generator_list()]
+  @impl true
+  def updater(_session, _language \\ "en"), do: []
+end
+
+defmodule Spandex.Query.Session do
+  use Spandex.QueryBuilder, index: Spandex.Index.Session
+  defstruct [:query, :index]
+end
+
 defmodule Spandex.QueryTest do
   use ExUnit.Case
 
@@ -18,11 +57,10 @@ defmodule Spandex.QueryTest do
                        "asset.text_content": %{type: "text"}
                      }
                    },
-                   module: Spandex.Index.Session,
-                   type: "session"
+                   module: Spandex.Index.Session
                  },
                  language: "en",
-                 query: %Spandex.Query.Session{query: nil}
+                 query: %Spandex.Query.Session{query: nil, index: Spandex.Index.Session}
                }
     end
 
@@ -42,11 +80,10 @@ defmodule Spandex.QueryTest do
                        "asset.text_content": %{type: "text"}
                      }
                    },
-                   module: Spandex.Index.Session,
-                   type: "session"
+                   module: Spandex.Index.Session
                  },
                  language: "en",
-                 query: %Spandex.Query.Session{query: nil}
+                 query: %Spandex.Query.Session{query: nil, index: Spandex.Index.Session}
                }
     end
   end
