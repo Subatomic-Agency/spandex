@@ -3,8 +3,9 @@ defmodule Spandex do
 
   def run_query(%{action: action} = query_map) do
     case apply(adapter(), action, [query_map]) do
-      [
-        ok: %HTTPoison.Response{
+      {
+        :ok,
+        %HTTPoison.Response{
           status_code: status_code,
           body: %{
             "error" => %{
@@ -13,7 +14,7 @@ defmodule Spandex do
             }
           }
         }
-      ]
+      }
       when status_code != 200 ->
         {:error, index, reason}
 
