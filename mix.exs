@@ -22,8 +22,8 @@ defmodule Spandex.MixProject do
   defp deps do
     [
       {:elastix,
-       git: "git@github.com:Subatomic-Agency/elastix.git",
-       sha: "9afc57c9de3c3014d25b62d11e806433e72c35ba"},
+       github: "Subatomic-Agency/elastix",
+       ref: "9afc57c9de3c3014d25b62d11e806433e72c35ba"},
       {:inflex, "~> 2.1"}
     ]
   end
